@@ -284,7 +284,33 @@ public:
         root->setLeft(root->getRight());
         root->setRight(temp);
     }
+    void nodeAtKDistance(Node* current, int k)
+    {
+        if (k == 0)
+        {
+            cout << current->getValue() << "\t";
+            return;
+        }
+        if (current == NULL)
+            return;
 
+        nodeAtKDistance(current->getLeft(), k - 1);
+        nodeAtKDistance(current->getRight(), k - 1);
+    }
+    void nodeAtKDistance(int k)//overloading
+    {
+        nodeAtKDistance(root, k);
+    }
+    void traverseLevelOrder()
+    {
+        cout << "\nLevel order travesal of the tree\n";
+        int h = height(root);
+        for (int i = 0; i <= h; i++)
+        {
+            nodeAtKDistance(i);
+            cout << endl;
+        }
+    }
 };
 int main()
 {
@@ -326,6 +352,12 @@ int main()
         cout << "valid BST\n";
     else
         cout << "Not valid BST\n";
+    
+    cout << endl;
+    t1.nodeAtKDistance(t1.height(t1.getRoot()));
+
+    t1.traverseLevelOrder();
+    t2.traverseLevelOrder();
 
     return 0;
 }
