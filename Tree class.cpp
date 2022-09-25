@@ -215,11 +215,11 @@ public:
 
         return 0 + countLeaf(current->getLeft()) + countLeaf(current->getRight());
     }
-    void countLeaf()//Size of a tree is the number of elements present in the tree
+    void countLeaf()
     {
         cout << "\nNumber of leaf in this tree is " << countLeaf(root);
     }
-    int size(Node* current)
+    int size(Node* current)//Size of a tree is the number of elements present in the tree
     {
         if (current == NULL)
             return 0;
@@ -248,6 +248,43 @@ public:
             cout << "\nThe both trees are not equal\n";
 
     }
+     bool validBST(Node* current, int lower, int upper)
+    {
+        if (current->getLeft() == NULL && current->getRight() == NULL)
+        {
+            return (current->getValue() > lower && current->getValue() < upper);
+        }
+        else if (current->getLeft() == NULL)
+        {
+            return (current->getValue() > lower && current->getValue() < upper && validBST(current->getRight(), current->getValue(), upper));
+        }
+        else if (current->getRight() == NULL)
+        {
+            return (current->getValue() > lower && current->getValue() < upper && validBST(current->getLeft(), lower, current->getValue()));
+        }
+        else
+        {
+            return (current->getValue() > lower && current->getValue() < upper && validBST(current->getLeft(), lower, current->getValue())&& validBST(current->getRight(), current->getValue(), upper));
+        }
+
+    }
+    bool validBST()//overloading
+    {
+        if (root == NULL)
+            return true;
+        int max = maxValue(root);
+        max++;//increment in maximum value for getting upper bound of tree (upper).
+        int min = minValue(root);
+        min--;//decrement in minimum value for getting lower bound of tree (lower).
+        return (validBST(root, min, max));
+    }
+    void swapRoot()//just swap the left and right childs of tree's root.
+    {
+        Node* temp = root->getLeft();
+        root->setLeft(root->getRight());
+        root->setRight(temp);
+    }
+
 };
 int main()
 {
@@ -278,6 +315,17 @@ int main()
     t1.countLeaf();
     t1.size();
     t1.isEqual(&t2);
+    
+    t1.swapRoot();
+    if (t1.validBST())
+        cout << "valid BST\n";
+    else
+        cout << "Not valid BST\n";
+
+    if (t2.validBST())
+        cout << "valid BST\n";
+    else
+        cout << "Not valid BST\n";
 
     return 0;
 }
