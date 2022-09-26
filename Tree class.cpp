@@ -311,6 +311,67 @@ public:
             cout << endl;
         }
     }
+    Node* contains(Node* current,int value)//similar to find() ,but it returns the Node object as node of tree
+    {
+        if (current == NULL)
+            return current;
+        if (current->getValue() == value)
+            return current;
+        if (value > current->getValue())
+        {
+            return (contains(current->getRight(), value));
+        }
+        else
+        {
+            return (contains(current->getLeft(), value));
+        }
+    }
+    Node* contains(int value)//overloading
+    {
+        Node* temp = contains(root, value);
+        if (temp == NULL)
+            cout << "\nNumber not found returning NULL\n";
+        return temp;
+    }
+    Node* getAncestor(Node* current,Node* child)
+    {
+        if (current == NULL)
+            return current;
+        if (current->getLeft() == child || current->getRight()==child)
+            return current;
+        if (child->getValue() > current->getValue())
+        {
+            return (getAncestor(current->getRight(), child));
+        }
+        else
+        {
+            return (getAncestor(current->getLeft(), child));
+        }
+    }
+    Node* getAncestor(int value)//overloading
+    {
+        if (value == root->getValue())
+        {
+            cout << "\nthis is Root of tree, therfore return NULL\n";
+            return NULL;
+        }
+        Node* apex = contains(value);
+        if (apex == NULL)
+            return apex;
+        return (getAncestor(root, apex));
+
+    }
+    bool areSiblings(int v1, int v2)
+    {
+        Node* c1 = contains(root, v1);
+        Node* c2 = contains(root, v2);
+        if (c1 == NULL || c2 == NULL || c1->getValue()==root->getValue()|| c2->getValue() == root->getValue())
+            return false;
+        int p1 = (getAncestor(root, c1))->getValue();
+        int p2 = (getAncestor(root, c2)->getValue());
+        
+        return (p1 == p2)?true:false;
+    }
 };
 int main()
 {
@@ -358,6 +419,15 @@ int main()
 
     t1.traverseLevelOrder();
     t2.traverseLevelOrder();
+    
+    cout<<endl<<(t2.contains(9))->getValue();
+    cout << endl << (t2.getAncestor(4))->getValue();
+
+    if (t2.areSiblings(10, 8))
+        cout << "\n they are siblings\n";
+    else
+        cout << "\n they are not siblings";
+
 
     return 0;
 }
