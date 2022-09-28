@@ -41,6 +41,39 @@ class Tree
 {
     Node* root;
 public:
+    /*
+    void insert(Node* apex,int val)     //insertion through recursion
+    {
+        if(isEmpty())
+        {
+            root=new Node(val);
+            return;
+        }
+        if(apex->getValue()>val)
+        {
+            if(apex->getLeft()==NULL)
+            {
+                Node* temp=new Node(val);
+                apex->setLeft(temp);
+                return;
+            }
+            return(insert(apex->getLeft(),val));
+        }
+        else{
+           if(apex->getRight()==NULL)
+            {
+                Node* temp=new Node(val);
+                apex->setRight(temp);
+                return;
+            }
+            return(insert(apex->getRight(),val)); 
+        }
+    }
+    void insert(int val)
+    {
+        insert(root,val);
+    }
+    */
     void setRoot(Node* root)
     {
         this->root = root;
