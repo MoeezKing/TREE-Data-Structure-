@@ -1,0 +1,206 @@
+#include <iostream>
+
+using namespace std;
+class Node
+{
+    int value;
+    Node* left;
+    Node* right;
+public:
+    void setValue(int value)
+    {
+        this->value = value;
+    }
+    void setLeft(Node* left)
+    {
+        this->left = left;
+    }
+    void setRight(Node* right)
+    {
+        this->right = right;
+    }
+    int getValue()
+    {
+        return value;
+    }
+    Node* getLeft()
+    {
+        return left;
+    }
+    Node* getRight()
+    {
+        return right;
+    }
+    Node(int value=-9999, Node* left=NULL, Node* right=NULL)
+    {
+        setValue(value);
+        setLeft(left);
+        setRight(right);
+    }
+};
+class Tree
+{
+    Node* root;
+public:
+    void setRoot(Node* root)
+    {
+        this->root = root;
+    }
+    Node* getRoot()
+    {
+        return root;
+    }
+    Tree(Node* root = NULL)
+    {
+        setRoot(root);
+    }
+    bool isEmpty()
+    {
+        return (root == NULL);
+    }
+    bool isLeaf(Node* apex)
+    {
+        return (apex->getLeft()==NULL&&apex->getRight()==NULL);
+    }
+    void insert(Node* apex,int val)     //insertion through recursion
+    {
+        if(isEmpty())
+        {
+            root=new Node(val);
+            return;
+        }
+        if(apex->getValue()>val)
+        {
+            if(apex->getLeft()==NULL)
+            {
+                Node* temp=new Node(val);
+                apex->setLeft(temp);
+                return;
+            }
+            return(insert(apex->getLeft(),val));
+        }
+        else{
+           if(apex->getRight()==NULL)
+            {
+                Node* temp=new Node(val);
+                apex->setRight(temp);
+                return;
+            }
+            return(insert(apex->getRight(),val)); 
+        }
+    }
+    void insert(int val)
+    {
+        insert(root,val);
+    }
+    bool doesExist(int value)
+    {
+        Node* current = root;
+        while (current != NULL)
+        {
+            if (value < current->getValue())
+            {
+                current = current->getLeft();
+            }
+            else if (value > current->getValue())
+            {
+                current = current->getRight();
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return false;
+    }  
+    void traversePreOrder(Node* current)
+    {
+        if (current == NULL)
+            return;
+
+        cout << current->getValue() << "\t";
+        traversePreOrder(current->getLeft());
+        traversePreOrder(current->getRight());
+    }
+    void traversePreOrder()//overloading the function
+    {
+        cout << "\nPreOrder traverse of the tree is  ";
+        traversePreOrder(root);
+        cout << endl;
+    }
+    void traverseInOrder(Node* current)
+    {
+        if (current == NULL)
+            return;
+
+        traverseInOrder(current->getLeft());
+        cout << current->getValue() << "\t";
+        traverseInOrder(current->getRight());
+    }
+    void traverseInOrder()//overloading
+    {
+        cout << "\nInOrder traverse of the tree is  ";
+        traverseInOrder(root);
+        cout << endl;
+    }
+    void traversePostOrder(Node* current)
+    {
+        if (current == NULL)
+            return;
+
+        traversePostOrder(current->getLeft());
+        traversePostOrder(current->getRight());
+        cout << current->getValue() << "\t";
+    }
+    void traversePostOrder()//overloading
+    {
+        cout << "\nPostOrder traverse of the tree is  ";
+        traversePostOrder(root);
+        cout << endl;
+    }
+    bool isFullParent(Node* apex)
+    {
+        return (apex->getLeft()!=NULL&&apex->getRight()!=NULL);
+    }
+    bool isSingleParent(Node* apex)
+    {
+        return ((apex->getLeft()==NULL&&apex->getRight()!=NULL)||(apex->getLeft()!=NULL&&apex->getRight()==NULL));
+    }
+    Node* getLeftChild(Node *apex)
+    {
+        return apex->getLeft();
+    }
+    Node* getRightChild(Node *apex)
+    {
+        return apex->getRight();
+    }
+    Node* getLeftMost(Node* apex)
+    {
+        if(apex->getLeft()==NULL)
+        return apex;
+        
+        return(getLeftMost(apex->getLeft()));
+    }
+    Node* getLeftMost()//overloading
+    {
+        return getLeftMost(root);
+    }
+    Node* getRightMost(Node* apex)
+    {
+        if(apex->getRight()==NULL)
+        return apex;
+        
+        return(getRightMost(apex->getRight()));
+    }
+    Node* getRightMost()//overloading
+    {
+        return geRightMost(root);
+    }
+    
+};
+int main()
+{
+    cout<<"Hello World";
+
+    return 0;
+}
