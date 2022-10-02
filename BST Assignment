@@ -158,6 +158,47 @@ public:
         traversePostOrder(root);
         cout << endl;
     }
+    void nodeAtKDistance(Node* current, int k)
+    {
+        if (k == 0)
+        {
+            cout << current->getValue() << "\t";
+            return;
+        }
+        if (current == NULL)
+            return;
+
+        nodeAtKDistance(current->getLeft(), k - 1);
+        nodeAtKDistance(current->getRight(), k - 1);
+    }
+    void nodeAtKDistance(int k)//overloading
+    {
+        nodeAtKDistance(root, k);
+    }
+    int max(int m1, int m2)//return maximum value
+    {
+        if (m1 > m2)
+            return m1;
+        else
+            return m2;
+    }
+    int height(Node* current)
+    {
+        if (isLeaf(current))
+            return 0;
+
+        return 1 + max(height(current->getLeft()), height(current->getRight()));
+    }
+    void traverseLevelOrder()
+    {
+        cout << "\nLevel order travesal of the tree\n";
+        int h = height(root);
+        for (int i = 0; i <= h; i++)
+        {
+            nodeAtKDistance(i);
+            cout << endl;
+        }
+    }
     bool isFullParent(Node* apex)
     {
         return (apex->getLeft()!=NULL&&apex->getRight()!=NULL);
@@ -194,13 +235,139 @@ public:
     }
     Node* getRightMost()//overloading
     {
-        return geRightMost(root);
+        return getRightMost(root);
     }
-    
+    Node* getSuccessor(Node* apex)
+    {
+        Node* temp=getLeftMost(apex->getRight());
+        
+        if(temp==apex->getRight())
+        return NULL;
+        
+        return temp;
+    }
+    int getSuccessor()//overloading
+    {
+        Node*t=getSuccessor(root);
+        
+        if(t==NULL)
+        {
+            cout<<"\nNo getSuccessor returning -9999(junk value)\n";
+            return -9999;
+        }
+        return t->getValue();
+    }
+     Node* getPredecessor (Node* apex)
+    {
+        Node* temp=getRightMost(apex->getLeft());
+        
+        if(temp==apex->getLeft())
+        return NULL;
+        
+        return temp;
+    }
+    int getPredecessor ()//overloading
+    {
+        Node*t=getPredecessor(root);
+        
+        if(t==NULL)
+        {
+            cout<<"\nNo getSuccessor returning -9999(junk value)\n";
+            return -9999;
+        }
+        return t->getValue();
+    }
+    Node* contains(Node* current,int value)//Similar to find() ,but it returns the Node object as node of tree
+    {
+        if (current == NULL)
+            return current;
+        if (current->getValue() == value)
+            return current;
+        if (value > current->getValue())
+        {
+            return (contains(current->getRight(), value));
+        }
+        else
+        {
+            return (contains(current->getLeft(), value));
+        }
+    }
+    Node* contains(int value)//overloading
+    {
+        Node* temp = contains(root, value);
+        if (temp == NULL)
+            cout << "\nNumber not found returning NULL\n";
+        return temp;
+    }
+    Node* getAncestor(Node* current,Node* child)// getParent
+    {
+        if (current == NULL)
+            return current;
+        if (current->getLeft() == child || current->getRight()==child)
+            return current;
+        if (child->getValue() > current->getValue())
+        {
+            return (getAncestor(current->getRight(), child));
+        }
+        else
+        {
+            return (getAncestor(current->getLeft(), child));
+        }
+    }
+    Node* getAncestor(int value)//overloading :: getParent
+    {
+        if (value == root->getValue())
+        {
+            cout << "\nthis is Root of tree, therfore return NULL\n";
+            return NULL;
+        }
+        Node* apex = contains(value);
+        if (apex == NULL)
+            return apex;
+        return (getAncestor(root, apex));
+
+    }
+    Node* getChild(Node* apex)
+    {
+        if(apex!=NULL && isSingleParent(apex))
+        {
+            if(apex->getRight()!=NULL)
+                return getRightChild(apex);
+            else
+            return getLeftChild(apex);
+        }
+        cout<<"\nThe node is not single parent returning NULL\n";
+        return NULL;
+    }
+    void getChlidrens(Node* apex)
+    {
+        if(apex!=NULL && isFullParent(apex))
+            cout<<"\nLeft child= "<<getLeftChild(apex)->getValue()<<"\tRightt child= "<<getRightChild(apex)->getValue()<<endl;
+        else
+        {
+            if(apex!=NULL)
+            cout<<getChild(apex)->getValue();
+        }
+        
+    }
 };
 int main()
 {
-    cout<<"Hello World";
-
+    Tree t1;
+     t1.insert(7);
+    t1.insert(4);
+    t1.insert(9);
+    t1.insert(1);
+    t1.insert(6);
+    t1.insert(8);
+    t1.insert(10);
+    
+    t1.traversePreOrder();
+    t1.traversePostOrder();
+    t1.traverseInOrder();
+    t1.traverseLevelOrder();
+    cout<<t1.getSuccessor()<<endl;
+    cout<<t1.getPredecessor();
+    t1.getChlidrens(t1.getRoot());
     return 0;
 }
