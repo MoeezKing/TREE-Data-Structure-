@@ -181,7 +181,72 @@ public:
             cout << endl;
         }
     }
+    int countLeaf(int index)
+    {
+        if (isleaf(index))
+            return 1;
 
+        return 0 + countLeaf(leftIndex(index)) + countLeaf(rightIndex(index));
+    }
+    void countLeaf()//overloading
+    {
+        if (isEmpty())
+        {
+            cout << "\nEmpty tree\n";
+            return ;
+        }
+
+        cout << "\nThere are " << countLeaf(0) << " leaf in this tree\n";
+
+    }
+    int countElements(int index)
+    {
+        if (root[index] == -9999)
+            return 0;
+
+        return 1 + countElements(leftIndex(index)) + countElements(rightIndex(index));
+    }
+    void countElements()//overloading
+    {
+        if (isEmpty())
+        {
+            cout << "\nZero elements\n";
+            return;
+        }
+        cout << "\nThere are " << countElements(0) << " elements in the Tree";
+    }
+    int maxValue(int index)
+    {
+        if (root[rightIndex(index)] == -9999)
+            return root[index];
+
+        return maxValue(rightIndex(index));
+    }
+    void maxValue()//overloading
+    {
+        if (isEmpty())
+        {
+            cout << "\n Tree is empty\n";
+            return;
+        }
+        cout << "\n Maximum value is " << maxValue(0);
+    }
+    int minValue(int index)
+    {
+        if (root[leftIndex(index)] == -9999)
+            return root[index];
+
+        return minValue(leftIndex(index));
+    }
+    void minValue()//overloading
+    {
+        if (isEmpty())
+        {
+            cout << "\n Tree is empty\n";
+            return;
+        }
+        cout << "\n Minimum value is " << minValue(0);
+    }
 };
 int main()
 {
@@ -200,5 +265,10 @@ int main()
     t1.traversePostOrder();
 
     t1.levelOrderTraverse();
+    
+    t1.countLeaf();
+    t1.countElements();
+    t1.maxValue();
+    t1.minValue();
     return 0;
 }
