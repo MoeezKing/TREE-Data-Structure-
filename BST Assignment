@@ -350,6 +350,70 @@ public:
         }
         
     }
+    bool Delete (int val)
+  {
+    Node *item = contains (val);
+
+    if (item == NULL)
+      return false;
+    if (isLeaf (item))
+      {
+
+	if (item == root)
+	  {
+	    delete root;
+	    root = NULL;
+	    return true;
+	  }
+
+	Node *parent = getAncestor (val);
+
+	if (parent->getLeft () == item)
+	  parent->setLeft (NULL);
+	else
+	  parent->setRight (NULL);
+
+	delete item;
+	return true;
+      }
+    else if (isSingleParent (item))
+      {
+	Node *child;
+	if (item->getLeft () != NULL)
+	  child = item->getLeft ();
+	else
+	  child = item->getRight ();
+
+	if (item == root)
+	  {
+	    root = child;
+	    delete item;
+	    return true;
+	  }
+
+	int temp = child->getValue ();
+	Delete (temp);
+	item->setValue (temp);
+
+	return true;
+      }
+    else
+      {
+	Node *predecessor = item->getLeft ();
+	while (predecessor->getRight () != NULL)
+	  {
+	    predecessor = predecessor->getRight ();
+	  }
+
+	int temp = predecessor->getValue ();
+	Delete (predecessor->getValue ());
+
+	item->setValue (temp);
+
+	return true;
+      }
+
+  }
 };
 int main()
 {
