@@ -207,7 +207,7 @@ public:
     }
     int height(Node* current)
     {
-        if (isLeaf(current))
+        if (current==NULL || isLeaf(current))
             return 0;
 
         return 1 + max(height(current->getLeft()), height(current->getRight()));
@@ -319,13 +319,15 @@ public:
     }
     void nodeAtKDistance(Node* current, int k)
     {
+         if (current == NULL)
+            return;
+        
         if (k == 0)
         {
             cout << current->getValue() << "\t";
             return;
         }
-        if (current == NULL)
-            return;
+       
 
         nodeAtKDistance(current->getLeft(), k - 1);
         nodeAtKDistance(current->getRight(), k - 1);
@@ -405,6 +407,78 @@ public:
         
         return (p1 == p2)?true:false;
     }
+    bool isSingleParent(Node* current)
+    {
+        return ((current->getLeft() != NULL && current->getRight() == NULL) || (current->getLeft() == NULL && current->getRight() != NULL));
+    }
+    bool Delete(int val)
+    {
+        Node* item = contains(val);
+        
+        if (item == NULL)
+            return false;
+        if (isLeaf(item))
+        {
+            
+            if (item == root)
+            {
+                delete root;
+                root = NULL;
+                return true;
+            }
+            
+            Node* parent = getAncestor(val);
+           
+            if (parent->getLeft() == item)
+                parent->setLeft(NULL);
+            else
+                parent->setRight(NULL);
+
+            delete item;
+            return true;
+        }
+        else if (isSingleParent(item))
+        {
+            Node* child;
+            if (item->getLeft() != NULL)
+                child = item->getLeft();
+            else
+                child = item->getRight();
+
+            if (item == root)
+            {
+                root=child;
+                delete item;
+                return true;
+            }
+
+            Node* parent = getAncestor(val);
+            
+            if (parent->getLeft() == item)
+                parent->setLeft(child);
+            else
+                parent->setRight(child);
+
+            delete item;
+            return true;
+        }
+        else
+        {
+            Node* predecessor = item->getLeft();
+            while (predecessor->getRight()!=NULL)
+            {
+                predecessor = predecessor->getRight();
+            }
+            
+            int temp=predecessor->getValue();
+            Delete (predecessor->getValue());
+
+            item->setValue(temp);
+  
+            return true;
+        }
+
+    }
 };
 int main()
 {
@@ -461,6 +535,11 @@ int main()
     else
         cout << "\n they are not siblings";
 
+    t2.insert(11);
+    t2.traverseLevelOrder();
+    t2.Delete(7);
 
+    t2.traverseLevelOrder();
+    
     return 0;
 }
