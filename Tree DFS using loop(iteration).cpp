@@ -63,8 +63,9 @@ class Tree
               
         }
     }
-  void preOrderTraverse(Node* apex)
+  void preOrderTraverse()
   {
+      Node* apex=this->root;
       stack<Node*> st;
       st.push(apex);
       
@@ -81,6 +82,28 @@ class Tree
             st.push(apex->left);        
       }
   }
+  void inOrederTraverse()
+  {
+      stack<Node*> st;
+      Node* node=this->root;
+      while(true)
+      {
+          if(node!=NULL)
+          {
+              st.push(node);
+              node=node->left;
+          }
+          else
+          {
+              if(st.empty())
+                break;
+            node=st.top();
+            st.pop();
+            cout<<node->data<<"\t";
+            node=node->right;
+          }
+      }
+  }
 };
 int main()
 {
@@ -94,6 +117,8 @@ int main()
     t.insert(10);
     t.insert(1);
 
-    t.preOrderTraverse(t.root);
+    t.preOrderTraverse();
+    cout<<endl;
+    t.inOrederTraverse();
     return 0;
 }
